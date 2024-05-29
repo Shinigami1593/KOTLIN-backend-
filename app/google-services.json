@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457744826766",
+    "project_id": "kotlin-sem-3-project",
+    "storage_bucket": "kotlin-sem-3-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457744826766:android:e94871437a8f8f5fd064df",
+        "android_client_info": {
+          "package_name": "com.example.cruddatabse_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCven6I1KQzHUI3dWExUj5EJNa0I6GaLww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
