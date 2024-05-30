@@ -10,17 +10,17 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:id="@+id/editText"
+        android:id="@+id/name"
         android:hint="Enter product name"
         android:layout_height="wrap_content"/>
     <EditText
         android:layout_width="match_parent"
-        android:id="@+id/editText1"
+        android:id="@+id/price"
         android:hint="Enter product Price"
         android:layout_height="wrap_content"/>
     <EditText
         android:layout_width="match_parent"
-        android:id="@+id/editText2"
+        android:id="@+id/description"
         android:hint="Enter product Description"
         android:layout_height="wrap_content"/>
     <Button
