@@ -1,5 +1,6 @@
 package com.example.cruddatabse_firebase.adapter
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -15,14 +16,17 @@ class ProductAdapter(var data:ArrayList<ProductModel>) : RecyclerView.Adapter<Pr
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        TODO("Not yet implemented")
+        var view = LayoutInflater.from(parent.context).inflate(R.layout.sample_product,parent,false)
+        return ProductViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return data.size
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.productName.text = data[position].name
+        holder.productPrice.text = data[position].price.toString()
+        holder.productDescription.text = data[position].description
     }
 }

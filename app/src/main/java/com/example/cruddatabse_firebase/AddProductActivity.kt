@@ -13,9 +13,10 @@ import com.google.firebase.database.FirebaseDatabase
 
 class AddProductActivity : AppCompatActivity() {
     var database:FirebaseDatabase=FirebaseDatabase.getInstance()
-    var ref : DatabaseReference = database.reference.child("product")
+    var ref : DatabaseReference = database.reference.child("products")
     lateinit var binding:ActivityAddProductBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityAddProductBinding.inflate(layoutInflater)
@@ -33,10 +34,12 @@ class AddProductActivity : AppCompatActivity() {
             ref.child(id).setValue(data).addOnCompleteListener {
                 if(it.isSuccessful){
                     Toast.makeText(applicationContext, "Data Added", Toast.LENGTH_LONG).show()
+                    finish()
                 }else{
                     Toast.makeText(applicationContext,it.exception?.message,Toast.LENGTH_LONG).show()
                 }
             }
+
         }
 
 

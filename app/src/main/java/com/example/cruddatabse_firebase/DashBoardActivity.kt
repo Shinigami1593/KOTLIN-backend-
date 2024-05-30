@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cruddatabse_firebase.adapter.ProductAdapter
 import com.example.cruddatabse_firebase.databinding.ActivityDashBoardBinding
 import com.example.cruddatabse_firebase.model.ProductModel
 import com.google.firebase.database.DataSnapshot
@@ -19,6 +21,8 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var binding:ActivityDashBoardBinding
     var database : FirebaseDatabase = FirebaseDatabase.getInstance()
     var ref : DatabaseReference = database.reference.child("products")
+
+    var productList = ArrayList<ProductModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,15 +36,24 @@ class DashBoardActivity : AppCompatActivity() {
 
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                productList.clear()
                 for(eachData in snapshot.children){
                     var product = eachData.getValue(ProductModel::class.java)
+//                        Log.d("data from firebase", product?.name.toString())
                     if(product!=null){
                         Log.d("data from firebase", product.name)
                         Log.d("data from firebase", product.description)
                         Log.d("data from firebase", product.price.toString())
                         Log.d("data from firebase", product.id)
+
+                        productList.add(product)
                     }
+
                 }
+                var adapter = ProductAdapter(productList)
+                binding.recyclerView.layoutManager = LinearLayoutManager(this@DashBoardActivity)
+                binding.recyclerView.adapter = adapter
+
             }
 
             override fun onCancelled(error: DatabaseError) {
