@@ -50,7 +50,7 @@ class DashBoardActivity : AppCompatActivity() {
                     }
 
                 }
-                var adapter = ProductAdapter(productList)
+                var adapter = ProductAdapter(this@DashBoardActivity, productList)
                 binding.recyclerView.layoutManager = LinearLayoutManager(this@DashBoardActivity)
                 binding.recyclerView.adapter = adapter
 
