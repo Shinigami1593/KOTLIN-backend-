@@ -19,12 +19,17 @@ import com.example.cruddatabse_firebase.databinding.ActivityAddProductBinding
 import com.example.cruddatabse_firebase.model.ProductModel
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
 class AddProductActivity : AppCompatActivity() {
     var database:FirebaseDatabase=FirebaseDatabase.getInstance()
     var ref : DatabaseReference = database.reference.child("products")
     lateinit var binding:ActivityAddProductBinding
+
+    var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    var storageRef : StorageReference = firebaseStorage.reference
 
     lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
@@ -106,6 +111,9 @@ class AddProductActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,it.exception?.message,Toast.LENGTH_LONG).show()
             }
         }
+    }
+    fun uploadImage(){
+
     }
     fun registerActivityForResult(){
         activityResultLauncher = registerForActivityResult(
