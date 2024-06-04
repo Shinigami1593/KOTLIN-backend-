@@ -3,6 +3,7 @@ package com.example.cruddatabse_firebase
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,8 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.cruddatabse_firebase.databinding.ActivityAddProductBinding
@@ -48,6 +51,22 @@ class AddProductActivity : AppCompatActivity() {
 
         registerActivityForResult()
 
+        binding.imageBrowse.setOnClickListener{
+            var permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                android.Manifest.permission.READ_MEDIA_IMAGES
+            }else{
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            if (ContextCompat.checkSelfPermission(this,permissions) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, arrayOf(permissions),1)
+            }else{
+                val intent = Intent()
+                intent.type = "image/*"
+                intent.action = Intent.ACTION_GET_CONTENT
+                activityResultLauncher.launch(intent)
+            }
+        }
+
         binding.btnProduct.setOnClickListener{
             var name:String = binding.name.text.toString()
             var price:Int = binding.price.text.toString().toInt()
@@ -64,6 +83,7 @@ class AddProductActivity : AppCompatActivity() {
                 }
             }
         }
+        
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
