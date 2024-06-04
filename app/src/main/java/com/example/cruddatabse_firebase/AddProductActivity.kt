@@ -91,6 +91,22 @@ class AddProductActivity : AppCompatActivity() {
             insets
         }
     }
+    fun addProduct(){
+        var name:String = binding.name.text.toString()
+        var price:Int = binding.price.text.toString().toInt()
+        var desc:String = binding.description.text.toString()
+        var id = ref.push().key.toString() //creates random unique id for database entities
+        var data = ProductModel(id,name,price,desc)
+
+        ref.child(id).setValue(data).addOnCompleteListener {
+            if(it.isSuccessful){
+                Toast.makeText(applicationContext, "Data Added", Toast.LENGTH_LONG).show()
+                finish()
+            }else{
+                Toast.makeText(applicationContext,it.exception?.message,Toast.LENGTH_LONG).show()
+            }
+        }
+    }
     fun registerActivityForResult(){
         activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
