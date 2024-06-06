@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cruddatabse_firebase.adapter.ProductAdapter
 import com.example.cruddatabse_firebase.databinding.ActivityDashBoardBinding
 import com.example.cruddatabse_firebase.model.ProductModel
@@ -22,17 +24,41 @@ class DashBoardActivity : AppCompatActivity() {
     var database : FirebaseDatabase = FirebaseDatabase.getInstance()
     var ref : DatabaseReference = database.reference.child("products")
 
+    lateinit var productAdapter: ProductAdapter
     var productList = ArrayList<ProductModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityDashBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        productAdapter = ProductAdapter(this@DashBoardActivity, productList)
         binding.floatingActionButton.setOnClickListener{
             var intent = Intent(this@DashBoardActivity,AddProductActivity::class.java)
             startActivity(intent)
         }
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+               var id = productAdapter.getProductId(viewHolder.adapterPosition)
+                ref.child(id).removeValue()
+            //                .addOnCompleteListener {
+//                    if(it.isSuccessful){
+//
+//                    }else{
+//
+//                    }
+//                }
+            }
+
+        })
 
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -50,9 +76,9 @@ class DashBoardActivity : AppCompatActivity() {
                     }
 
                 }
-                var adapter = ProductAdapter(this@DashBoardActivity, productList)
+
                 binding.recyclerView.layoutManager = LinearLayoutManager(this@DashBoardActivity)
-                binding.recyclerView.adapter = adapter
+                binding.recyclerView.adapter = productAdapter
 
             }
 

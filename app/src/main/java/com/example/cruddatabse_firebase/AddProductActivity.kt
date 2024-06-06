@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import java.util.UUID
 
 class AddProductActivity : AppCompatActivity() {
     var database:FirebaseDatabase=FirebaseDatabase.getInstance()
@@ -73,19 +74,13 @@ class AddProductActivity : AppCompatActivity() {
         }
 
         binding.btnProduct.setOnClickListener{
-            var name:String = binding.name.text.toString()
-            var price:Int = binding.price.text.toString().toInt()
-            var desc:String = binding.description.text.toString()
-            var id = ref.push().key.toString() //creates random unique id for database entities
-            var data = ProductModel(id,name,price,desc)
 
-            ref.child(id).setValue(data).addOnCompleteListener {
-                if(it.isSuccessful){
-                    Toast.makeText(applicationContext, "Data Added", Toast.LENGTH_LONG).show()
-                    finish()
-                }else{
-                    Toast.makeText(applicationContext,it.exception?.message,Toast.LENGTH_LONG).show()
-                }
+            if(imageUri != null){
+                uploadImage()
+            }else{
+                Toast.makeText(applicationContext,"Please upload image first",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
         
@@ -96,12 +91,12 @@ class AddProductActivity : AppCompatActivity() {
             insets
         }
     }
-    fun addProduct(){
+    fun addProduct(url: String, imageName:String){
         var name:String = binding.name.text.toString()
         var price:Int = binding.price.text.toString().toInt()
         var desc:String = binding.description.text.toString()
         var id = ref.push().key.toString() //creates random unique id for database entities
-        var data = ProductModel(id,name,price,desc)
+        var data = ProductModel(id,name,price,desc,url,imageName)
 
         ref.child(id).setValue(data).addOnCompleteListener {
             if(it.isSuccessful){
@@ -113,7 +108,19 @@ class AddProductActivity : AppCompatActivity() {
         }
     }
     fun uploadImage(){
+        val imageName = UUID.randomUUID().toString()
+        var imageReference = storageRef.child("products").child(imageName)
 
+        imageUri?.let { url ->
+            imageReference.putFile(url).addOnSuccessListener {
+                imageReference.downloadUrl.addOnSuccessListener {downloadUrl->
+                 var imageUrls = downloadUrl.toString()
+                 addProduct(imageUrls, imageName)
+                }
+            }.addOnFailureListener {
+
+            }
+        }
     }
     fun registerActivityForResult(){
         activityResultLauncher = registerForActivityResult(
