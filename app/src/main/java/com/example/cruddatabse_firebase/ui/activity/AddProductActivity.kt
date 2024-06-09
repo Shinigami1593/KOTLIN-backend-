@@ -1,4 +1,4 @@
-package com.example.cruddatabse_firebase
+package com.example.cruddatabse_firebase.ui.activity
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.databinding.ActivityAddProductBinding
 import com.example.cruddatabse_firebase.model.ProductModel
 import com.google.firebase.database.DatabaseReference
@@ -25,9 +26,9 @@ import com.squareup.picasso.Picasso
 import java.util.UUID
 
 class AddProductActivity : AppCompatActivity() {
+    lateinit var binding:ActivityAddProductBinding
     var database:FirebaseDatabase=FirebaseDatabase.getInstance()
     var ref : DatabaseReference = database.reference.child("products")
-    lateinit var binding:ActivityAddProductBinding
 
     var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     var storageRef : StorageReference = firebaseStorage.reference
@@ -118,7 +119,6 @@ class AddProductActivity : AppCompatActivity() {
                  addProduct(imageUrls, imageName)
                 }
             }.addOnFailureListener {
-
             }
         }
     }

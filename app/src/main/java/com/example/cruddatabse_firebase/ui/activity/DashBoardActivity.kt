@@ -1,4 +1,4 @@
-package com.example.cruddatabse_firebase
+package com.example.cruddatabse_firebase.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.adapter.ProductAdapter
 import com.example.cruddatabse_firebase.databinding.ActivityDashBoardBinding
 import com.example.cruddatabse_firebase.model.ProductModel
@@ -39,7 +40,7 @@ class DashBoardActivity : AppCompatActivity() {
         setContentView(binding.root)
         productAdapter = ProductAdapter(this@DashBoardActivity, productList)
         binding.floatingActionButton.setOnClickListener{
-            var intent = Intent(this@DashBoardActivity,AddProductActivity::class.java)
+            var intent = Intent(this@DashBoardActivity, AddProductActivity::class.java)
             startActivity(intent)
         }
 

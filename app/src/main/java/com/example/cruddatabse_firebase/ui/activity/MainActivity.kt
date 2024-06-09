@@ -1,4 +1,4 @@
-package com.example.cruddatabse_firebase
+package com.example.cruddatabse_firebase.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.passforgot.setOnClickListener{
-            var intent = Intent(this@MainActivity,ResetActivity::class.java)
+            var intent = Intent(this@MainActivity, ResetActivity::class.java)
             startActivity(intent)
         }
         binding.btnLogin.setOnClickListener{
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email,pass).addOnCompleteListener{
                 if (it.isSuccessful){
                     Toast.makeText(applicationContext, "Login successful",Toast.LENGTH_LONG).show()
-                    var intent = Intent(this@MainActivity,DashBoardActivity::class.java)
+                    var intent = Intent(this@MainActivity, DashBoardActivity::class.java)
                     startActivity(intent)
                     //navigate to dashboaard
                 }else{

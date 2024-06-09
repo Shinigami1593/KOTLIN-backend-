@@ -1,4 +1,4 @@
-package com.example.cruddatabse_firebase
+package com.example.cruddatabse_firebase.ui.activity
 
 import android.os.Bundle
 import android.widget.Toast
@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.databinding.ActivityResetBinding
 import com.google.firebase.auth.FirebaseAuth
 

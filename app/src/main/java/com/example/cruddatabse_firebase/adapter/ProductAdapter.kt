@@ -11,7 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cruddatabse_firebase.R
-import com.example.cruddatabse_firebase.UpdateActivity
+import com.example.cruddatabse_firebase.ui.activity.UpdateActivity
 import com.example.cruddatabse_firebase.model.ProductModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -55,7 +55,7 @@ class ProductAdapter(var context: Context , var data:ArrayList<ProductModel>) : 
 
         holder.productDescription.text = data[position].description
         holder.btnEdit.setOnClickListener {
-            var intent = Intent(context,UpdateActivity::class.java)
+            var intent = Intent(context, UpdateActivity::class.java)
             intent.putExtra("products", data[position])
             context.startActivity(intent)
         }

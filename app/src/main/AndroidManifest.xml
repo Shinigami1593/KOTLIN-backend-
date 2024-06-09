@@ -17,10 +17,10 @@
         android:theme="@style/Theme.CRUDdatabsefirebase"
         tools:targetApi="31">
         <activity
-            android:name=".UpdateActivity"
+            android:name=".ui.activity.UpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".AddProductActivity"
+            android:name=".ui.activity.AddProductActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DashBoardActivity"
+            android:name=".ui.activity.DashBoardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ResetActivity"
+            android:name=".ui.activity.ResetActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
