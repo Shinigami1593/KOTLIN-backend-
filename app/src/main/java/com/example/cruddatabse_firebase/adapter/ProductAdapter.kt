@@ -64,4 +64,8 @@ class ProductAdapter(var context: Context , var data:ArrayList<ProductModel>) : 
     fun getProductId(position: Int) : String{
         return data[position].id
     }
+
+    fun getIName(position: Int):String{
+        return data[position].imageName
+    }
 }

@@ -27,6 +27,7 @@ class UpdateActivity : AppCompatActivity() {
     var database: FirebaseDatabase = FirebaseDatabase.getInstance()
     var ref : DatabaseReference = database.reference.child("products")
     var id = ""
+    var imageName = ""
     lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
     override fun onRequestPermissionsResult(
@@ -69,13 +70,14 @@ class UpdateActivity : AppCompatActivity() {
 
         var product:ProductModel? = intent.getParcelableExtra("products")
         id = product?.id.toString()
+        imageName = product?.imageName.toString()
 
         binding.uName.setText(product?.name)
         binding.uPrice.setText(product?.price.toString())
         binding.uDescription.setText(product?.description)
 
         binding.btnUpdate.setOnClickListener{
-
+            updateProduct()
         }
 
 

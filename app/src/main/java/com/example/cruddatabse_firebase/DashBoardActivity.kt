@@ -3,6 +3,7 @@ package com.example.cruddatabse_firebase
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,11 +19,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class DashBoardActivity : AppCompatActivity() {
     lateinit var binding:ActivityDashBoardBinding
     var database : FirebaseDatabase = FirebaseDatabase.getInstance()
     var ref : DatabaseReference = database.reference.child("products")
+
+    var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    var storageRef : StorageReference = firebaseStorage.reference
 
     lateinit var productAdapter: ProductAdapter
     var productList = ArrayList<ProductModel>()
@@ -48,17 +54,18 @@ class DashBoardActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                var id = productAdapter.getProductId(viewHolder.adapterPosition)
-                ref.child(id).removeValue()
-            //                .addOnCompleteListener {
-//                    if(it.isSuccessful){
-//
-//                    }else{
-//
-//                    }
-//                }
+               var imageName = productAdapter.getIName(viewHolder.adapterPosition)
+                ref.child(id).removeValue().addOnCompleteListener {
+                    if(it.isSuccessful){
+                        storageRef.child("products").child(imageName).delete()
+                        Toast.makeText(this@DashBoardActivity,"Delete Successful",Toast.LENGTH_LONG)
+                    }else{
+
+                    }
+                }
             }
 
-        })
+        }).attachToRecyclerView(binding.recyclerView)
 
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
