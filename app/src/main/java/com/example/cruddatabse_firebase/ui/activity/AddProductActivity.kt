@@ -18,6 +18,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.databinding.ActivityAddProductBinding
 import com.example.cruddatabse_firebase.model.ProductModel
+import com.example.cruddatabse_firebase.repository.ProductRepositoryImpl
+import com.example.cruddatabse_firebase.utils.ImageUtils
+import com.example.cruddatabse_firebase.viewmodel.ProductViewModel
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -27,14 +30,12 @@ import java.util.UUID
 
 class AddProductActivity : AppCompatActivity() {
     lateinit var binding:ActivityAddProductBinding
-    var database:FirebaseDatabase=FirebaseDatabase.getInstance()
-    var ref : DatabaseReference = database.reference.child("products")
-
-    var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-    var storageRef : StorageReference = firebaseStorage.reference
 
     lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
+
+    lateinit var imageUtils: ImageUtils
+    lateinit var productModel: ProductViewModel
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -56,22 +57,18 @@ class AddProductActivity : AppCompatActivity() {
         binding = ActivityAddProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        registerActivityForResult()
+        imageUtils = ImageUtils(this)
+        imageUtils.registerActivity {url->
+            url.let {
+                imageUri = it
+                Picasso.get().load(url).into(binding.imageBrowse)
+            }
+        }
+        var repo = ProductRepositoryImpl()
+        productModel = ProductViewModel(repo)
 
         binding.imageBrowse.setOnClickListener{
-            var permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                android.Manifest.permission.READ_MEDIA_IMAGES
-            }else{
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
-            }
-            if (ContextCompat.checkSelfPermission(this,permissions) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this, arrayOf(permissions),1)
-            }else{
-                val intent = Intent()
-                intent.type = "image/*"
-                intent.action = Intent.ACTION_GET_CONTENT
-                activityResultLauncher.launch(intent)
-            }
+            imageUtils.launchGallery(this)
         }
 
         binding.btnProduct.setOnClickListener{
@@ -96,46 +93,25 @@ class AddProductActivity : AppCompatActivity() {
         var name:String = binding.name.text.toString()
         var price:Int = binding.price.text.toString().toInt()
         var desc:String = binding.description.text.toString()
-        var id = ref.push().key.toString() //creates random unique id for database entities
-        var data = ProductModel(id,name,price,desc,url,imageName)
 
-        ref.child(id).setValue(data).addOnCompleteListener {
-            if(it.isSuccessful){
-                Toast.makeText(applicationContext, "Data Added", Toast.LENGTH_LONG).show()
-                finish()
+        var data = ProductModel("",name,price,desc,url,imageName)
+        productModel.addProduct(data){success, message ->
+            if(success){
+                Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
             }else{
-                Toast.makeText(applicationContext,it.exception?.message,Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
             }
         }
     }
     fun uploadImage(){
-        val imageName = UUID.randomUUID().toString()
-        var imageReference = storageRef.child("products").child(imageName)
-
-        imageUri?.let { url ->
-            imageReference.putFile(url).addOnSuccessListener {
-                imageReference.downloadUrl.addOnSuccessListener {downloadUrl->
-                 var imageUrls = downloadUrl.toString()
-                 addProduct(imageUrls, imageName)
+        imageUri?.let {
+            productModel.uploadImage(it){
+                success, imageUrl, imageName ->
+                if(success){
+                    addProduct(imageUrl.toString(),imageName.toString())
                 }
-            }.addOnFailureListener {
             }
         }
     }
-    fun registerActivityForResult(){
-        activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            ActivityResultCallback {result ->
 
-                val resultcode = result.resultCode
-                val imageData = result.data
-                if(resultcode == RESULT_OK && imageData != null){
-                    imageUri = imageData.data
-                    imageUri?.let {
-                        Picasso.get().load(it).into(binding.imageBrowse)
-                    }
-                }
-
-            })
-    }
 }

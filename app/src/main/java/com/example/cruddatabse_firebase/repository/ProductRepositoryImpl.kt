@@ -1,9 +1,14 @@
 package com.example.cruddatabse_firebase.repository
 
 import android.net.Uri
+import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cruddatabse_firebase.model.ProductModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.UUID
@@ -41,5 +46,40 @@ class ProductRepositoryImpl:ProductRepository {
             }
 
         }
+    }
+
+    override fun getAllProduct(callback: (List<ProductModel>?,Boolean, String?) -> Unit) {
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var productList = mutableListOf<ProductModel>()
+                for(eachData in snapshot.children){
+                    var product = eachData.getValue(ProductModel::class.java)
+//                        Log.d("data from firebase", product?.name.toString())
+                    if(product!=null){
+                        productList.add(product)
+                    }
+
+                }
+                callback(productList,true,"Data successfuly retrieved")
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(null,false,"Unable to fetch ${error.message}")
+            }
+
+        })
+    }
+
+    override fun updateProduct(id: String, callback: (Boolean, String?) -> Unit) {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteData(id: String, callback: (Boolean, String?) -> Unit) {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteImage(imageName: String, callback: (Boolean, String?) -> Unit) {
+        TODO("Not yet implemented")
     }
 }
