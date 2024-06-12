@@ -68,4 +68,9 @@ class ProductAdapter(var context: Context , var data:ArrayList<ProductModel>) : 
     fun getIName(position: Int):String{
         return data[position].imageName
     }
+    fun updateData(products:List<ProductModel>){
+        data.clear()
+        data.addAll(products)
+        notifyDataSetChanged()
+    }
 }

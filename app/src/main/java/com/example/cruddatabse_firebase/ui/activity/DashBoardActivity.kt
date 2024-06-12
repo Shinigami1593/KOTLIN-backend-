@@ -56,6 +56,12 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
+        productViewModel.productList.observe(this){products ->
+            products?.let {
+                productAdapter.updateData(it)
+            }
+        }
+
 //        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
 //            override fun onMove(
 //                recyclerView: RecyclerView,

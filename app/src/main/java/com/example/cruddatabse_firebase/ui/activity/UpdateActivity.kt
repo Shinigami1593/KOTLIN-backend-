@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultCallback
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.databinding.ActivityUpdateBinding
 import com.example.cruddatabse_firebase.model.ProductModel
+import com.example.cruddatabse_firebase.utils.ImageUtils
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
@@ -27,6 +29,8 @@ class UpdateActivity : AppCompatActivity() {
     var imageName = ""
     lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
+
+    lateinit var imageUtils: ImageUtils
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -42,28 +46,20 @@ class UpdateActivity : AppCompatActivity() {
         }
     }
 
-    fun registerActivityForResult(){
-        activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            ActivityResultCallback {result ->
 
-                val resultcode = result.resultCode
-                val imageData = result.data
-                if(resultcode == RESULT_OK && imageData != null){
-                    imageUri = imageData.data
-                    imageUri?.let {
-                        Picasso.get().load(it).into(binding.updateImage)
-                    }
-                }
-
-            })
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        registerActivityForResult()
+
+        imageUtils = ImageUtils(this)
+        imageUtils.registerActivity {
+            imageUri = it
+            Picasso.get().load(it).into(binding.updateImage)
+        }
+
+
 
         var product:ProductModel? = intent.getParcelableExtra("products")
         id = product?.id.toString()

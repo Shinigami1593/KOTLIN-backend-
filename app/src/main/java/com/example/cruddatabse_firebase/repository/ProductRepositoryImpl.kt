@@ -19,18 +19,18 @@ class ProductRepositoryImpl:ProductRepository {
     var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     var storageRef : StorageReference = firebaseStorage.reference
 
-    override fun uploadImage(imageUrl: Uri, callback: (Boolean, String?, String?) -> Unit) {
-        val imageName = UUID.randomUUID().toString()
+    override fun uploadImage(imageName: String,imageUrl: Uri, callback: (Boolean, String?) -> Unit) {
+//        val imageName = UUID.randomUUID().toString()
         var imageReference = storageRef.child("products").child(imageName)
 
         imageUrl?.let { url ->
             imageReference.putFile(url).addOnSuccessListener {
                 imageReference.downloadUrl.addOnSuccessListener {downloadUrl->
                     var imageUrls = downloadUrl.toString()
-                    callback(true,imageUrls,imageName)
+                    callback(true,imageUrls)
                 }
             }.addOnFailureListener {
-                callback(false,"","")
+                callback(false,"")
             }
         }    }
 
