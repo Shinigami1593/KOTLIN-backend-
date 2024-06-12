@@ -16,7 +16,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cruddatabse_firebase.R
 import com.example.cruddatabse_firebase.databinding.ActivityUpdateBinding
 import com.example.cruddatabse_firebase.model.ProductModel
+import com.example.cruddatabse_firebase.repository.ProductRepositoryImpl
 import com.example.cruddatabse_firebase.utils.ImageUtils
+import com.example.cruddatabse_firebase.viewmodel.ProductViewModel
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
@@ -29,7 +31,7 @@ class UpdateActivity : AppCompatActivity() {
     var imageName = ""
     lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
-
+    lateinit var productViewModel: ProductViewModel
     lateinit var imageUtils: ImageUtils
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -53,26 +55,30 @@ class UpdateActivity : AppCompatActivity() {
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var repo = ProductRepositoryImpl()
+        productViewModel = ProductViewModel(repo)
+
+
         imageUtils = ImageUtils(this)
         imageUtils.registerActivity {
             imageUri = it
             Picasso.get().load(it).into(binding.updateImage)
         }
 
-
-
         var product:ProductModel? = intent.getParcelableExtra("products")
         id = product?.id.toString()
         imageName = product?.imageName.toString()
-
         binding.uName.setText(product?.name)
         binding.uPrice.setText(product?.price.toString())
         binding.uDescription.setText(product?.description)
 
         binding.btnUpdate.setOnClickListener{
-            updateProduct()
+            uploadImage()
         }
 
+        binding.updateImage.setOnClickListener{
+            imageUtils.launchGallery(this@UpdateActivity)
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -80,7 +86,19 @@ class UpdateActivity : AppCompatActivity() {
             insets
         }
     }
-    fun updateProduct(){
+    fun uploadImage(){
+        imageUri?.let {
+            productViewModel.uploadImage(imageName, it){
+                success, imageUrl ->
+                if(success){
+                    updateProduct(imageUrl.toString())
+                }else{
+
+                }
+            }
+        }
+    }
+    fun updateProduct(url:String){
         var uName : String = binding.uName.text.toString()
         var uPrice : Int = binding.uPrice.text.toString().toInt()
         var uDesc : String = binding.uDescription.text.toString()
@@ -102,4 +120,5 @@ class UpdateActivity : AppCompatActivity() {
         }
 
     }
+
 }

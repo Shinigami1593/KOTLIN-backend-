@@ -21,18 +21,8 @@ class ProductRepositoryImpl:ProductRepository {
 
     override fun uploadImage(imageName: String,imageUrl: Uri, callback: (Boolean, String?) -> Unit) {
 //        val imageName = UUID.randomUUID().toString()
-        var imageReference = storageRef.child("products").child(imageName)
 
-        imageUrl?.let { url ->
-            imageReference.putFile(url).addOnSuccessListener {
-                imageReference.downloadUrl.addOnSuccessListener {downloadUrl->
-                    var imageUrls = downloadUrl.toString()
-                    callback(true,imageUrls)
-                }
-            }.addOnFailureListener {
-                callback(false,"")
-            }
-        }    }
+    }
 
     override fun addProduct(productModel: ProductModel, callback: (Boolean, String?) -> Unit) {
         var id = ref.push().key.toString() //creates random unique id for database entities
