@@ -108,7 +108,14 @@ class UpdateActivity : AppCompatActivity() {
         data["price"] = uPrice
         data["description"] = uDesc
 
-
+        productViewModel.updateProduct(id,data){
+            success,message ->
+            if(success){
+                Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 
