@@ -2,6 +2,7 @@ package com.example.cruddatabse_firebase.repository
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cruddatabse_firebase.model.ProductModel
 import com.google.firebase.database.DataSnapshot
@@ -61,8 +62,16 @@ class ProductRepositoryImpl:ProductRepository {
         })
     }
 
-    override fun updateProduct(id: String, callback: (Boolean, String?) -> Unit) {
-        TODO("Not yet implemented")
+    override fun updateProduct(id: String,data:MutableMap<String,Any>?, callback: (Boolean, String?) -> Unit) {
+        data?.let {
+            ref.child(id).updateChildren(it).addOnCompleteListener {
+                if(it.isSuccessful){
+                    callback(true, "Your data has been updated")
+                }else{
+                    callback(false, "Unable to update the data")
+                }
+            }
+        }
     }
 
     override fun deleteData(id: String, callback: (Boolean, String?) -> Unit) {

@@ -108,16 +108,7 @@ class UpdateActivity : AppCompatActivity() {
         data["price"] = uPrice
         data["description"] = uDesc
 
-        ref.child(id).updateChildren(data).addOnCompleteListener {
-            if(it.isSuccessful){
-                Toast.makeText(applicationContext,"Data updated",
-                    Toast.LENGTH_LONG).show()
-                finish()
-            }else{
-                Toast.makeText(applicationContext,it.exception?.message,
-                    Toast.LENGTH_LONG).show()
-            }
-        }
+
 
     }
 
