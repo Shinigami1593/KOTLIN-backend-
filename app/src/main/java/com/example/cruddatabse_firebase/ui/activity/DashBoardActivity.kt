@@ -62,29 +62,34 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
-//        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
-//            override fun onMove(
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                target: RecyclerView.ViewHolder
-//            ): Boolean {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//               var id = productAdapter.getProductId(viewHolder.adapterPosition)
-//               var imageName = productAdapter.getIName(viewHolder.adapterPosition)
-//                ref.child(id).removeValue().addOnCompleteListener {
-//                    if(it.isSuccessful){
-//                        storageRef.child("products").child(imageName).delete()
-//                        Toast.makeText(this@DashBoardActivity,"Delete Successful",Toast.LENGTH_LONG)
-//                    }else{
-//
-//                    }
-//                }
-//            }
-//
-//        }).attachToRecyclerView(binding.recyclerView)
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+               var id = productAdapter.getProductId(viewHolder.adapterPosition)
+               var imageName = productAdapter.getIName(viewHolder.adapterPosition)
+
+                productViewModel.deleteData(id){
+                    success,message ->
+                    if(success){
+                        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+                        productViewModel.deleteImage(imageName){
+                                success,message->
+                        }
+                    }else{
+                        Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
+                    }
+
+                }
+            }
+
+        }).attachToRecyclerView(binding.recyclerView)
 
 
         binding.floatingActionButton.setOnClickListener{

@@ -75,10 +75,22 @@ class ProductRepositoryImpl:ProductRepository {
     }
 
     override fun deleteData(id: String, callback: (Boolean, String?) -> Unit) {
-        TODO("Not yet implemented")
+        ref.child(id).removeValue().addOnCompleteListener {
+            if(it.isSuccessful){
+                callback(true,"Data deleted")
+            }else{
+                callback(false,"Unable to delete data")
+            }
+        }
     }
 
     override fun deleteImage(imageName: String, callback: (Boolean, String?) -> Unit) {
-        TODO("Not yet implemented")
+        storageRef.child("products").child(imageName).delete().addOnCompleteListener {
+            if(it.isSuccessful){
+                callback(true,"Image deleted")
+            }else{
+                callback(false,"Unable to delete image")
+            }
+        }
     }
 }
