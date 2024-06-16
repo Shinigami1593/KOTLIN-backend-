@@ -20,6 +20,7 @@ import com.example.cruddatabse_firebase.databinding.ActivityAddProductBinding
 import com.example.cruddatabse_firebase.model.ProductModel
 import com.example.cruddatabse_firebase.repository.ProductRepositoryImpl
 import com.example.cruddatabse_firebase.utils.ImageUtils
+import com.example.cruddatabse_firebase.utils.LoadingUtils
 import com.example.cruddatabse_firebase.viewmodel.ProductViewModel
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -33,7 +34,7 @@ class AddProductActivity : AppCompatActivity() {
 
     lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
-
+    lateinit var loadingUtils: LoadingUtils
     lateinit var imageUtils: ImageUtils
     lateinit var productModel: ProductViewModel
 
@@ -97,6 +98,7 @@ class AddProductActivity : AppCompatActivity() {
         var data = ProductModel("",name,price,desc,url,imageName)
         productModel.addProduct(data){success, message ->
             if(success){
+                loadingUtils.dismiss()
                 Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
             }else{
                 Toast.makeText(applicationContext,message,Toast.LENGTH_LONG).show()
@@ -104,6 +106,7 @@ class AddProductActivity : AppCompatActivity() {
         }
     }
     fun uploadImage(){
+        loadingUtils.showLoading()
         val imageName = UUID.randomUUID().toString()
         imageUri?.let {
             productModel.uploadImage(imageName,it){
