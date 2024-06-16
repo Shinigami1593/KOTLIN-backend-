@@ -19,7 +19,7 @@ class SensorListActivity : AppCompatActivity() {
         sensorListBinding = ActivitySensorListBinding.inflate(layoutInflater)
         setContentView(sensorListBinding.root)
 
-        se  rManager
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         var sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
 
