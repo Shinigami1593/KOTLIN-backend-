@@ -29,8 +29,6 @@ class ProductAdapter(var context: Context , var data:ArrayList<ProductModel>) : 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.sample_product,parent,false)
         return ProductViewHolder(view)
-
-
     }
 
     override fun getItemCount(): Int {

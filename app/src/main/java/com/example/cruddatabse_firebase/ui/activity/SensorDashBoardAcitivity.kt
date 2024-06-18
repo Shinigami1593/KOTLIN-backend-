@@ -21,6 +21,10 @@ class SensorDashBoardAcitivity : AppCompatActivity() {
             var intent = Intent(this@SensorDashBoardAcitivity,SensorListActivity::class.java)
             startActivity(intent)
         }
+        sensorDashboardActivity.sbtn.setOnClickListener {
+            var intent = Intent(this@SensorDashBoardAcitivity,AccelometerActivity::class.java)
+            startActivity(intent)
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
