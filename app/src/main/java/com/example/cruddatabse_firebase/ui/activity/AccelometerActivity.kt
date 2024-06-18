@@ -18,8 +18,8 @@ import kotlin.math.sqrt
 class AccelometerActivity : AppCompatActivity(),SensorEventListener{
     lateinit var accelometerActivity: ActivityAccelometerBinding
     lateinit var sensor:Sensor
-    private var lastShakeTime: Long = 0
     lateinit var sensorManager: SensorManager
+    private var lastShakeTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,6 +58,7 @@ class AccelometerActivity : AppCompatActivity(),SensorEventListener{
         var zAxis = values[2]
 
         accelometerActivity.lblAcc.text = "x Axis: $xAxis yAxis: $yAxis z Axis: $zAxis"
+        detectShake(xAxis,yAxis,zAxis)
 
     }
     private fun detectShake(x: Float, y: Float, z: Float) {
@@ -83,7 +84,4 @@ class AccelometerActivity : AppCompatActivity(),SensorEventListener{
 
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-    }
 }
