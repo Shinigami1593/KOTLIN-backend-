@@ -38,6 +38,7 @@ class NotificationActivity : AppCompatActivity() {
             var channel : NotificationChannel = NotificationChannel(CHANNEL_ID,"My channel",
                 NotificationManager.IMPORTANCE_DEFAULT)
             var manager : NotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
         }
     }
 }
