@@ -1,6 +1,7 @@
 package com.example.cruddatabse_firebase.ui.activity
 
 import android.hardware.Sensor
+import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
@@ -37,5 +38,17 @@ class LightSensorActivity : AppCompatActivity(),SensorEventListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun checkSensor(): Boolean {
+        return true
+    }
+
+    override fun onSensorChanged(p0: SensorEvent?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        TODO("Not yet implemented")
     }
 }
